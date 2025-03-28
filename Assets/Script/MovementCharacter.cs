@@ -10,6 +10,5 @@ public class MovementCharacter : MonoBehaviour
 
         transform.Translate(Vector3.right * move * moveSpeed * Time.deltaTime);
         
-        transform.rotation = Quaternion.identity; 
     }
 }
