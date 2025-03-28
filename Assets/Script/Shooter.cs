@@ -25,8 +25,17 @@ public class Shooter : MonoBehaviour
             
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                Instantiate(shootPointPrefab, shootPoint.position, Quaternion.identity);
-                Instantiate(hitPointPrefab, hit.point, Quaternion.identity);
+                GameObject fireObj = Instantiate(shootPointPrefab, shootPoint.position, Quaternion.identity);
+                GameObject fireObj2 = Instantiate(hitPointPrefab, hit.point, Quaternion.identity);
+                
+                Destroy( fireObj, 1);
+                Destroy( fireObj2, 1);
+
+                ICanDamage damageable = hit.collider.GetComponent<ICanDamage>();
+                if (damageable != null)
+                {
+                    damageable.TakeDamage(10);  
+                }
             }
         }
     }
