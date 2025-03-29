@@ -4,7 +4,19 @@ public class Shooter : MonoBehaviour
 {
     [SerializeField] private Transform shootPoint; 
     [SerializeField] private GameObject shootPointPrefab; 
-    
+    [SerializeField] private AudioClip shootSound;  // เสียงที่ต้องการใช้เมื่อยิง
+    private AudioSource audioSource;  // ตัวจัดการเสียง
+
+    void Start()
+    {
+        // หา AudioSource ที่ติดอยู่กับ GameObject นี้
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();  // ถ้าไม่มี ก็สร้างใหม่
+        }
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0)) 
@@ -27,7 +39,11 @@ public class Shooter : MonoBehaviour
             GameObject fireObj = Instantiate(shootPointPrefab, shootPoint.position, Quaternion.identity);
             Destroy(fireObj, 1);
 
-            
+            // เล่นเสียงเมื่อยิง
+            if (shootSound != null)
+            {
+                audioSource.PlayOneShot(shootSound);
+            }
             
             ICanDamage damageable = hit.collider.GetComponent<ICanDamage>();
             if (damageable != null)
