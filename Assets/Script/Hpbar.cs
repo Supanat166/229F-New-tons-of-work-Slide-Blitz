@@ -32,4 +32,14 @@ public class HpBar : MonoBehaviour
         currentHp -= damageAmount;
         sliderHp.value = currentHp / maxHp;
     }
+    
+    private void OnCollisionEnter(Collision collision) 
+    {
+        if (collision.gameObject.CompareTag("Obstacle")) 
+        { 
+            takeDamage(5);
+        }
+    }
+
 }
+
