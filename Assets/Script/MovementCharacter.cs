@@ -9,7 +9,6 @@ public class MovementCharacter : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        
     }
 
     private void Update()
@@ -19,6 +18,9 @@ public class MovementCharacter : MonoBehaviour
 
         float move = Input.GetAxis("Horizontal");
         rb.linearVelocity = new Vector3(move * moveSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
+
+        // จำกัดมุมการหมุนของแกน X และล็อคแกน Y, Z
+        LimitRotation();
     }
 
     public void ReduceSpeed(float amount)
@@ -49,15 +51,28 @@ public class MovementCharacter : MonoBehaviour
         // หยุดเวลาในเกม
         Time.timeScale = 0; // หยุดเวลา
     }
-    
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Obstacle"))
         {
             rb.angularVelocity = Vector3.zero;
-            // ให้แน่ใจว่าตัวละครไม่หมุน
-            transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f); // ล็อคหมุนแค่แกน Y
+            LimitRotation(); // จำกัดมุมการหมุนทุกครั้งที่ชนสิ่งกีดขวาง
         }
     }
 
+    private void LimitRotation()
+    {
+        Vector3 currentRotation = transform.eulerAngles;
+
+        // แปลงค่า Rotation ให้อยู่ในช่วง -180 ถึง 180
+        float clampedX = Mathf.Clamp((currentRotation.x > 180) ? currentRotation.x - 360 : currentRotation.x, -15f, 15f);
+
+        // ล็อคแกน Y และ Z ไว้ที่ 0 องศา
+        float lockedY = 0f;
+        float lockedZ = 0f;
+
+        // เซ็ตค่าการหมุนกลับไปที่ตัวละคร โดยล็อคแกน Y และ Z
+        transform.rotation = Quaternion.Euler(clampedX, lockedY, lockedZ);
+    }
 }
