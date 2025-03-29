@@ -19,7 +19,7 @@ public class HpBAar2 : MonoBehaviour
         if (health <= 0) return; 
 
         float move = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector3(move * moveSpeed, rb.velocity.y, rb.velocity.z);
+        rb.linearVelocity = new Vector3(move * moveSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
 
        
     }
@@ -41,7 +41,7 @@ public class HpBAar2 : MonoBehaviour
 
     private void Die()
     {
-        rb.velocity = Vector3.zero; // หยุดการเคลื่อนที่
+        rb.linearVelocity = Vector3.zero; // หยุดการเคลื่อนที่
         gameObject.SetActive(false); // ปิดตัวละครแทนการ Destroy
     }
 }

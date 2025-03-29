@@ -3,7 +3,7 @@ using UnityEngine;
 public class MovementCharacter : MonoBehaviour
 {
     public float moveSpeed = 5f;
-    public float health = 100f;
+    public float health = 15f;
     private Rigidbody rb;
 
     private void Start()
