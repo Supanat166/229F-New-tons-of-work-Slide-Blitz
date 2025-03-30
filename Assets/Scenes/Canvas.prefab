@@ -825,7 +825,7 @@ GameObject:
   - component: {fileID: 4609504978989473302}
   - component: {fileID: 5738007411996156657}
   m_Layer: 5
-  m_Name: WinUI
+  m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
