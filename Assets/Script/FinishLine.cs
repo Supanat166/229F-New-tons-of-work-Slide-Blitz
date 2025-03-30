@@ -1,66 +1,43 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.SceneManagement; // ใช้สำหรับเปลี่ยนฉาก
 
 public class FinishLine : MonoBehaviour
 {
-    [SerializeField] private GameObject winPanel;
-    private static bool isRetrying = false; // ตัวแปรเพื่อตรวจสอบว่าเป็นการ retry หรือไม่
+    [SerializeField] private GameObject winPanel; // อ้างอิง UI ที่จะแสดง
 
-    private bool hasFinished = false;
-
-    private void Awake()
-    {
-        Time.timeScale = 1; // รีเซ็ตเวลาให้ทำงานปกติทุกครั้งที่โหลดฉากใหม่
-    }
+    private bool hasFinished = false; // ใช้เพื่อป้องกันการเปิด UI ซ้ำ
 
     private void Start()
     {
-        // ซ่อน UI ตอนเริ่มเกม
-        if (winPanel != null)
-            winPanel.SetActive(false);
-
-        // รีเซ็ตค่าถ้าเป็นการ retry
-        if (isRetrying)
-        {
-            hasFinished = false;
-            isRetrying = false; // รีเซ็ตตัวแปร
-        }
+        winPanel.SetActive(false); // ซ่อน UI ตอนแรก
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !hasFinished)
+        if (other.CompareTag("Player") && !hasFinished) // ตรวจว่าตัวละครชนเส้นชัยไหม
         {
-            hasFinished = true;
-            if (winPanel != null)
-                winPanel.SetActive(true); // แสดง UI
-
-            Time.timeScale = 0; // หยุดเกม
+            hasFinished = true; // ตั้งค่าว่าเสร็จสิ้นแล้ว
+            winPanel.SetActive(true); // แสดง UI
+            Time.timeScale = 0; // หยุดเวลาในเกม
         }
     }
 
+    // ฟังก์ชันสำหรับปุ่มต่าง ๆ
     public void NextLevel()
     {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        Time.timeScale = 1; // กลับมาเล่นตามปกติ
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); // ไปด่านถัดไป
     }
 
     public void MainMenu()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("MainMenu"); // ไปที่หน้าเมนูหลัก (ใส่ชื่อ Scene ให้ตรง)
     }
 
     public void Retry()
     {
-        isRetrying = true; // ตั้งค่าการ retry
         Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    public void Credit()
-    {
-        Time.timeScale = 1;
-        SceneManager.LoadScene("Credit");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // โหลดด่านเดิมอีกครั้ง
     }
 }
