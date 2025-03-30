@@ -3,7 +3,7 @@ using UnityEngine;
 public class MovementCharacter : MonoBehaviour
 {
     public float moveSpeed = 5f;
-    public float health = 100f;
+    public float health = 15f;
     private Rigidbody rb;
 
     private void Start()
@@ -75,4 +75,5 @@ public class MovementCharacter : MonoBehaviour
         // เซ็ตค่าการหมุนกลับไปที่ตัวละคร โดยล็อคแกน Y และ Z
         transform.rotation = Quaternion.Euler(clampedX, lockedY, lockedZ);
     }
+    
 }
