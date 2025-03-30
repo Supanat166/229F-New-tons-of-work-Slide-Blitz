@@ -513,7 +513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3376a5947620af2428538be873bbbfb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeBeforeReturnToMenu: 23
+  timeBeforeReturnToMenu: 22
 --- !u!4 &706050289
 Transform:
   m_ObjectHideFlags: 0
