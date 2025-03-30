@@ -1,47 +1,60 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HpBAar2 : MonoBehaviour
+
+using UnityEngine;
+using UnityEngine.UI;
+
+public class HpBar2 : MonoBehaviour
 {
-    [SerializeField] private Slider SliderHp;
-    public float moveSpeed = 5f;
-    public float health = 15f;
-    private Rigidbody rb;
+    public Image healthBar;
+    public float healthAmount = 15f;
+    private float maxHealth = 15f;
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        UpdateHealthBar();
     }
 
-    private void Update()
+    private void OnCollisionEnter(Collision collision)
     {
-        // ถ้าเลือดหมดให้หยุดเคลื่อนไหว
-        if (health <= 0) return; 
-
-        float move = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector3(move * moveSpeed, rb.velocity.y, rb.velocity.z);
-
-       
-    }
-
-    public void ReduceSpeed(float amount)
-    {
-        moveSpeed = Mathf.Max(1f, moveSpeed - amount); // ลดความเร็วแต่ไม่ให้ต่ำกว่า 1
-    }
-
-    public void TakeDamage(float amount)
-    {
-        health -= amount;
-
-        if (health <= 0)
+        if (collision.gameObject.CompareTag("Obstacle")) // ชนสิ่งกีดขวาง
         {
-            Die(); // เรียกฟังก์ชันตายเมื่อ HP หมด
+          
+            TakeDamage(5);
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        healthAmount -= damage;
+        healthAmount = Mathf.Clamp(healthAmount, 0, maxHealth); // ป้องกันค่าติดลบ
+        UpdateHealthBar();
+
+        if (healthAmount <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void Heal(float healingAmount)
+    {
+        healthAmount += healingAmount;
+        healthAmount = Mathf.Clamp(healthAmount, 0, maxHealth); // ป้องกันเกิน Max
+        UpdateHealthBar();
+    }
+
+    private void UpdateHealthBar()
+    {
+        if (healthBar != null)
+        {
+            healthBar.fillAmount = healthAmount / maxHealth;
         }
     }
 
     private void Die()
     {
-        rb.velocity = Vector3.zero; // หยุดการเคลื่อนที่
-        gameObject.SetActive(false); // ปิดตัวละครแทนการ Destroy
+       
+        gameObject.SetActive(false); // ปิดตัวละครเมื่อ HP หมด
     }
 }
