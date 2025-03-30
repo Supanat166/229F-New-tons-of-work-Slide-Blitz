@@ -5,6 +5,8 @@ public class FinishLine : MonoBehaviour
 {
     [SerializeField] private GameObject winPanel; // อ้างอิง UI ที่จะแสดง
 
+    private bool hasFinished = false; // ใช้เพื่อป้องกันการเปิด UI ซ้ำ
+
     private void Start()
     {
         winPanel.SetActive(false); // ซ่อน UI ตอนแรก
@@ -12,18 +14,19 @@ public class FinishLine : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")) // ตรวจว่าตัวละครชนเส้นชัยไหม
+        if (other.CompareTag("Player") && !hasFinished) // ตรวจว่าตัวละครชนเส้นชัยไหม
         {
-            winPanel.SetActive(true); // แสดง UI ผ่านด่าน
-            Time.timeScale = 0; // หยุดเวลา
+            hasFinished = true; // ตั้งค่าว่าเสร็จสิ้นแล้ว
+            winPanel.SetActive(true); // แสดง UI
+            Time.timeScale = 0; // หยุดเวลาในเกม
         }
     }
 
-    // ฟังก์ชันสำหรับปุ่ม
+    // ฟังก์ชันสำหรับปุ่มต่าง ๆ
     public void NextLevel()
     {
         Time.timeScale = 1; // กลับมาเล่นตามปกติ
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); // ไปด่านต่อไป
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); // ไปด่านถัดไป
     }
 
     public void MainMenu()

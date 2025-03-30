@@ -32,7 +32,8 @@ public class ObstacleWood : MonoBehaviour, ICanDamage
 
         if (hitEffectPrefab != null)
         {
-            Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
+            GameObject woodObj = Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(woodObj, 1);
         }
 
         if (health <= 0)
@@ -40,7 +41,6 @@ public class ObstacleWood : MonoBehaviour, ICanDamage
             // เล่นเสียงเมื่อถูกทำลาย
             if (destroySound != null)
             {
-                Debug.Log("Playing destroy sound");
                 audioSource.PlayOneShot(destroySound);
             }
 
