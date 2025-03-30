@@ -3,18 +3,31 @@ using UnityEngine;
 public class MovementCharacter : MonoBehaviour
 {
     public float moveSpeed = 5f;
-    public float health = 15f;
+    public float health = 15f;  // เลือดของตัวละคร
+    public float maxHealth = 15f; // จำนวนเลือดสูงสุดของตัวละคร
     private Rigidbody rb;
+
+    // อ้างอิงถึง HealthBar
+    private HealthBar healthBar;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        // หา HealthBar ใน Scene และทำการเชื่อมต่อ
+        healthBar = FindObjectOfType<HealthBar>();  // หา HealthBar ใน Scene
+
+        // เริ่มต้น Health Bar
+        if (healthBar != null)
+        {
+            healthBar.UpdateHealthBar(health, maxHealth); // เรียกใช้ฟังก์ชันอัปเดต HealthBar
+        }
     }
 
     private void Update()
     {
         // ถ้าตัวละครเลือดหมดให้หยุดการเคลื่อนไหว
-        if (health <= 0) return; 
+        if (health <= 0) return;
 
         float move = Input.GetAxis("Horizontal");
         rb.linearVelocity = new Vector3(move * moveSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
@@ -29,15 +42,25 @@ public class MovementCharacter : MonoBehaviour
         Debug.Log("Speed Reduced: " + moveSpeed);
     }
 
+    // ฟังก์ชันในการลดเลือด
     public void TakeDamage(float amount)
     {
         health -= amount;
+        health = Mathf.Clamp(health, 0, maxHealth); // ป้องกันไม่ให้เลือดต่ำกว่า 0
+
+        // อัปเดต Health Bar ทุกครั้งที่เลือดลด
+        if (healthBar != null)
+        {
+            healthBar.UpdateHealthBar(health, maxHealth); // อัปเดตค่า Health Bar
+        }
+
         if (health <= 0)
         {
             Die(); // เรียกฟังก์ชันตายเมื่อเลือดหมด
         }
     }
 
+    // ฟังก์ชันเมื่อเลือดหมด
     private void Die()
     {
         Debug.Log("Character is dead!");
@@ -61,6 +84,7 @@ public class MovementCharacter : MonoBehaviour
         }
     }
 
+    // จำกัดมุมการหมุนของตัวละคร
     private void LimitRotation()
     {
         Vector3 currentRotation = transform.eulerAngles;
@@ -75,5 +99,4 @@ public class MovementCharacter : MonoBehaviour
         // เซ็ตค่าการหมุนกลับไปที่ตัวละคร โดยล็อคแกน Y และ Z
         transform.rotation = Quaternion.Euler(clampedX, lockedY, lockedZ);
     }
-    
 }
